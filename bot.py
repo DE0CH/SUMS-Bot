@@ -8,7 +8,9 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 import requests
 from keep_alive import keep_alive
+from dotenv import load_dotenv
 
+load_dotenv()
 conn = sqlite3.connect('bot.db')
 c = conn.cursor()
 c.execute("""CREATE TABLE IF NOT EXISTS users(
