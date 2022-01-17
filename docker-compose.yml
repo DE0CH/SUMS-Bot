@@ -4,4 +4,4 @@ services:
   email_bot:
     build: .
     volumes:
-      - ./bot.db:/usr/app/bot.db
+      - ./db:/usr/app/db
