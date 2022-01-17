@@ -121,12 +121,11 @@ def mailgun_send(email_address, verification_code):
 intents = discord.Intents.default()
 intents.members = True
 
-client = commands.Bot(command_prefix = '.', intents=intents)
+client = commands.Bot(command_prefix = 'e.', intents=intents)
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    await client.change_presence(activity=discord.Game(name='.vstatus | github.com/gg2001/EmailBot'))
 
 @client.event
 async def on_member_join(member):
@@ -269,7 +268,7 @@ async def domainadd(ctx, domain=None):
         add_domain(domain, ctx.guild.id)
         await ctx.send("```Current email domains: " + get_domains(ctx.guild.id) + "```")
 
-@client.command()
+@client.command()()
 async def domainremove(ctx, domain=None):
     if domain and ctx.guild and ctx.author.guild_permissions.administrator:
         domain = domain.strip()
@@ -279,7 +278,7 @@ async def domainremove(ctx, domain=None):
         remove_domain(domain, ctx.guild.id)
         await ctx.send("```Current email domains: " + get_domains(ctx.guild.id) + "```")
 
-@client.command()
+@client.command()()
 async def enableonjoin(ctx):
     if ctx.guild and ctx.author.guild_permissions.administrator:
         check_on_join = get_guild(ctx.guild.id)
@@ -288,7 +287,7 @@ async def enableonjoin(ctx):
         enable_onjoin(ctx.guild.id)
         await ctx.send("```Verify when a user joins? True```")
 
-@client.command()
+@client.command()()
 async def disableonjoin(ctx):
     if ctx.guild and ctx.author.guild_permissions.administrator:
         check_on_join = get_guild(ctx.guild.id)
@@ -297,7 +296,7 @@ async def disableonjoin(ctx):
         disable_onjoin(ctx.guild.id)
         await ctx.send("```Verify when a user joins? False```")
 
-@client.command()
+# @client.command()()
 async def vstatus(ctx):
     if ctx.guild:
         check_on_join = get_guild(ctx.guild.id)
@@ -322,7 +321,7 @@ async def vstatus(ctx):
             "Verify when a user joins? (default=False): " + str(on_join) + "\n" + 
             "Verified role (default=Verified): " + check_on_join[3] + "```")
 
-@client.command()
+@client.command()()
 async def vping(ctx):
     await ctx.send("{0}ms".format(round(client.latency * 1000)))
 
