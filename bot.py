@@ -54,7 +54,7 @@ async def on_message(message):
             elif message_content==codes.get(message.author, None):
                 member = client.get_guild(876437717142106222).get_member(message.author.id)
                 await member.add_roles(client.get_guild(876437717142106222).get_role(932716153141354567))
-                await message.channel.send("Thank you. You are successfully verfied.")
+                await message.channel.send("Thank you. You have been successfully verfied.")
             elif message.guild == None:
                 await message.channel.send("Unsupported command")
         except:
