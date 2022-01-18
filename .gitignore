@@ -155,6 +155,9 @@ tags
 !.vscode/extensions.json
 *.code-workspace
 
+# Idea Configs
+.idea
+
 # Local History for Visual Studio Code
 .history/
 

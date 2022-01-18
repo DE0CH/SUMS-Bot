@@ -1,15 +1,14 @@
+import os
+import re
+import secrets
+
 import discord
 from discord.ext import commands
-import sqlite3
-import re
-import os
-import random
+from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import requests
+
 from keep_alive import keep_alive
-from dotenv import load_dotenv
-import secrets
 
 load_dotenv()
 
