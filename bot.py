@@ -30,7 +30,7 @@ codes = dict()
 
 @client.event
 async def on_member_join(member):
-    await member.send("Thank you for joining SUMS discord. You need to verify that you are a student at St Andrews to gain access to some channels. **reply here with your @st-andrews.ac.uk email address**.")
+    await member.send("Thank you for joining SUMS discord. You need to verify that you are a student at St Andrews to gain access to some channels. **Please reply here with your @st-andrews.ac.uk email address**.")
 
 @client.event
 async def on_message(message):
@@ -63,7 +63,7 @@ async def on_message(message):
 
 @client.command()
 async def verify(ctx):
-    await ctx.author.send("Thank you for verifying yourself. **reply here with your @st-andrews.ac.uk email address**.")
+    await ctx.author.send("Thank you for verifying yourself. **Please reply here with your @st-andrews.ac.uk email address**.")
 
 keep_alive()
 client.run(os.environ.get('DISCORD_TOKEN'))
