@@ -344,3 +344,4 @@ bot.db
 .env
 dump.sql
 backup.db
+emails.txt

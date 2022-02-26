@@ -9,6 +9,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 from keep_alive import keep_alive
+from private_data import emails as valid_emails
 
 load_dotenv()
 
@@ -33,13 +34,19 @@ async def on_member_join(member):
     await member.send("Thank you for joining SUMS discord. You need to verify that you are a student at St Andrews to gain access to some channels. **Please reply here with your @st-andrews.ac.uk email address**.")
 
 @client.event
+async def on_reaction_add(reaction, users):
+    print(reaction, users)
+
+
+
+@client.event
 async def on_message(message):
     if message.author == client.user:
         return
     if not message.guild: # message is DM
         try:
             message_content = message.content.strip()
-            if (message.guild == None) and email_check(message_content) and message_content.endswith("st-andrews.ac.uk"):
+            if (message.guild == None) and email_check(message_content) and message_content in valid_emails:
                 random_code = secrets.token_hex(16) 
                 codes[message.author] = random_code
                 emailmessage = Mail(
@@ -51,8 +58,8 @@ async def on_message(message):
                 response = sg.send(emailmessage)
                 await message.channel.send("Email sent. **Please reply here with your verification code**. If you haven't received it, check your spam folder.")
             elif message_content==codes.get(message.author, None):
-                member = client.get_guild(876437717142106222).get_member(message.author.id)
-                await member.add_roles(client.get_guild(876437717142106222).get_role(932716153141354567))
+                member = client.get_guild(947059344363638794).get_member(message.author.id)
+                await member.add_roles(client.get_guild(947059344363638794).get_role(932716153141354567))
                 await message.channel.send("Thank you. You have been successfully verfied.")
             elif message.guild == None:
                 await message.channel.send("Unsupported command")
