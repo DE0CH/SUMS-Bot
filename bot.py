@@ -19,6 +19,7 @@ def verify_msg(guildname, domains):
 
 intents = discord.Intents.default()
 intents.members = True
+intents.reactions = True
 client = commands.Bot(command_prefix = '.', intents=intents)
 
 def email_check(email):
@@ -30,6 +31,42 @@ def email_check(email):
 
 codes = dict()
 codes_guild = dict()
+
+@client.event
+async def on_raw_reaction_add(reaction):
+    if reaction.guild_id == 947059344363638794 and reaction.message_id == 947154887370739803:
+        member = reaction.member
+        if reaction.emoji.name == '2️⃣':
+            await member.add_roles(client.get_guild(947059344363638794).get_role(947150257731551242))
+        if reaction.emoji.name == '3️⃣':
+            await member.add_roles(client.get_guild(947059344363638794).get_role(947150518038433802))
+        if reaction.emoji.name == '4️⃣':
+            await member.add_roles(client.get_guild(947059344363638794).get_role(947150517598048306))
+        if reaction.emoji.name == '5️⃣':
+            await member.add_roles(client.get_guild(947059344363638794).get_role(947150562972028928))
+        if reaction.emoji.name == '6️⃣':
+            await member.add_roles(client.get_guild(947059344363638794).get_role(947150581674434600))
+    if reaction.guild_id == 947059344363638794 and reaction.message_id == 947159949849542666:
+        if reaction.emoji.name == '✅':
+            author = reaction.member
+            codes[author.id] = secrets.token_hex(16)
+            codes_guild[codes[author.id]] = 947059344363638794
+            await author.send("Thank you for verifying yourself. **Please reply here with your registered email address**.")
+
+@client.event
+async def on_raw_reaction_remove(reaction):
+    if reaction.guild_id == 947059344363638794 and reaction.message_id == 947154887370739803:
+        member = client.get_guild(947059344363638794).get_member(reaction.user_id)
+        if reaction.emoji.name == '2️⃣':
+            await member.remove_roles(client.get_guild(947059344363638794).get_role(947150257731551242))
+        if reaction.emoji.name == '3️⃣':
+            await member.remove_roles(client.get_guild(947059344363638794).get_role(947150518038433802))
+        if reaction.emoji.name == '4️⃣':
+            await member.remove_roles(client.get_guild(947059344363638794).get_role(947150517598048306))
+        if reaction.emoji.name == '5️⃣':
+            await member.remove_roles(client.get_guild(947059344363638794).get_role(947150562972028928))
+        if reaction.emoji.name == '6️⃣':
+            await member.remove_roles(client.get_guild(947059344363638794).get_role(947150581674434600))
 
 @client.event
 async def on_message(message):
@@ -72,11 +109,6 @@ async def verify(ctx):
         codes[ctx.author.id] = secrets.token_hex(16)
         codes_guild[codes[ctx.author.id]] = 876437717142106222
         await ctx.author.send("Thank you for verifying yourself. **Please reply here with your @st-andrews.ac.uk email address**.")
-    if ctx.guild.id == 947059344363638794:
-        codes[ctx.author.id] = secrets.token_hex(16)
-        codes_guild[codes[ctx.author.id]] = 947059344363638794
-        await ctx.author.send("Thank you for verifying yourself. **Please reply here with your registered email address**.")
-
 
 keep_alive()
 client.run(os.environ.get('DISCORD_TOKEN'))
