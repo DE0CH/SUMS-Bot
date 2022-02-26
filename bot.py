@@ -9,7 +9,8 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 from keep_alive import keep_alive
-from private_data import emails as valid_emails
+from emails import emails as verified_emails
+
 
 load_dotenv()
 
@@ -28,16 +29,7 @@ def email_check(email):
         return False
 
 codes = dict()
-
-@client.event
-async def on_member_join(member):
-    await member.send("Thank you for joining SUMS discord. You need to verify that you are a student at St Andrews to gain access to some channels. **Please reply here with your @st-andrews.ac.uk email address**.")
-
-@client.event
-async def on_reaction_add(reaction, users):
-    print(reaction, users)
-
-
+codes_guild = dict()
 
 @client.event
 async def on_message(message):
@@ -46,9 +38,10 @@ async def on_message(message):
     if not message.guild: # message is DM
         try:
             message_content = message.content.strip()
-            if (message.guild == None) and email_check(message_content) and message_content in valid_emails:
-                random_code = secrets.token_hex(16) 
-                codes[message.author] = random_code
+            if email_check(message_content) and \
+                ((codes_guild.get(codes.get(message.author.id, None), None) == 876437717142106222 and message_content.endswith("st-andrews.ac.uk")) or \
+                (codes_guild.get(codes.get(message.author.id, None), None) == 947059344363638794 and message_content in verified_emails)):
+                random_code = codes[message.author.id]
                 emailmessage = Mail(
                     from_email=os.environ.get('SENDGRID_EMAIL'),
                     to_emails=message_content,
@@ -57,20 +50,33 @@ async def on_message(message):
                 sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
                 response = sg.send(emailmessage)
                 await message.channel.send("Email sent. **Please reply here with your verification code**. If you haven't received it, check your spam folder.")
-            elif message_content==codes.get(message.author, None):
-                member = client.get_guild(947059344363638794).get_member(message.author.id)
-                await member.add_roles(client.get_guild(947059344363638794).get_role(932716153141354567))
+            elif message_content==codes.get(message.author.id, None):
+                if codes_guild[message_content] == 876437717142106222:
+                    member = client.get_guild(876437717142106222).get_member(message.author.id)
+                    await member.add_roles(client.get_guild(876437717142106222).get_role(932716153141354567))
+                elif codes_guild[message.content] == 947059344363638794:
+                    member = client.get_guild(947059344363638794).get_member(message.author.id)
+                    await member.remove_roles(client.get_guild(947059344363638794).get_role(947063929438367774))
                 await message.channel.send("Thank you. You have been successfully verfied.")
             elif message.guild == None:
                 await message.channel.send("Unsupported command")
-        except:
+        except Exception as e:
             await message.channel.send('Uh Oh. Looks like the bot has malfunctioned :dizzy_face:. Please get DE0CH#6314\'s attention to ask him to fix it.')
+            raise e
     else:
         await client.process_commands(message)
 
 @client.command()
 async def verify(ctx):
-    await ctx.author.send("Thank you for verifying yourself. **Please reply here with your @st-andrews.ac.uk email address**.")
+    if ctx.guild.id == 876437717142106222:
+        codes[ctx.author.id] = secrets.token_hex(16)
+        codes_guild[codes[ctx.author.id]] = 876437717142106222
+        await ctx.author.send("Thank you for verifying yourself. **Please reply here with your @st-andrews.ac.uk email address**.")
+    if ctx.guild.id == 947059344363638794:
+        codes[ctx.author.id] = secrets.token_hex(16)
+        codes_guild[codes[ctx.author.id]] = 947059344363638794
+        await ctx.author.send("Thank you for verifying yourself. **Please reply here with your registered email address**.")
+
 
 keep_alive()
 client.run(os.environ.get('DISCORD_TOKEN'))
