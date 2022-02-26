@@ -40,7 +40,7 @@ async def on_message(message):
             message_content = message.content.strip()
             if email_check(message_content) and \
                 ((codes_guild.get(codes.get(message.author.id, None), None) == 876437717142106222 and message_content.endswith("st-andrews.ac.uk")) or \
-                (codes_guild.get(codes.get(message.author.id, None), None) == 947059344363638794 and message_content in verified_emails)):
+                (codes_guild.get(codes.get(message.author.id, None), None) == 947059344363638794 and message_content.lower() in verified_emails)):
                 random_code = codes[message.author.id]
                 emailmessage = Mail(
                     from_email=os.environ.get('SENDGRID_EMAIL'),
@@ -57,7 +57,7 @@ async def on_message(message):
                 elif codes_guild[message.content] == 947059344363638794:
                     member = client.get_guild(947059344363638794).get_member(message.author.id)
                     await member.remove_roles(client.get_guild(947059344363638794).get_role(947063929438367774))
-                await message.channel.send("Thank you. You have been successfully verfied.")
+                await message.channel.send("Thank you. You have been successfully verified.")
             elif message.guild == None:
                 await message.channel.send("Unsupported command")
         except Exception as e:
