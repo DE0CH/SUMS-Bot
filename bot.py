@@ -33,6 +33,12 @@ codes = dict()
 codes_guild = dict()
 
 @client.event
+async def on_member_join(member):
+    if member.guild.id == 947059344363638794:
+        await member.add_roles(client.get_guild(947059344363638794).get_role(947063929438367774))
+    
+
+@client.event
 async def on_raw_reaction_add(reaction):
     if reaction.guild_id == 947059344363638794 and reaction.message_id == 947154887370739803:
         member = reaction.member
