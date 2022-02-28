@@ -22,6 +22,17 @@ intents.members = True
 intents.reactions = True
 client = commands.Bot(command_prefix = '.', intents=intents)
 
+reaction_roles = {}
+
+reaction_roles[947841356280258600] = {}
+
+with open('reaction_roles_947841356280258600.txt') as f:
+    for line in f:
+        if line.strip():
+            emoji, id = line.split()
+            id = int(id)
+            reaction_roles[947841356280258600][emoji] = id
+
 def email_check(email):
     regex = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"
     if re.search(regex, email):
@@ -34,8 +45,8 @@ codes_guild = dict()
 
 @client.event
 async def on_raw_reaction_add(reaction):
+    member = reaction.member
     if reaction.guild_id == 947059344363638794 and reaction.message_id == 947154887370739803:
-        member = reaction.member
         if reaction.emoji.name == '2️⃣':
             await member.add_roles(client.get_guild(947059344363638794).get_role(947150257731551242))
         if reaction.emoji.name == '3️⃣':
@@ -52,11 +63,16 @@ async def on_raw_reaction_add(reaction):
             codes[author.id] = secrets.token_hex(16)
             codes_guild[codes[author.id]] = 947059344363638794
             await author.send("Thank you for verifying yourself. **Please reply here with your registered email address (to where we have sent you SUMO emails)**.")
+    if reaction.guild_id == 947059344363638794 and reaction.message_id == 947841356280258600:
+        try:
+            await member.add_roles(client.get_guild(947059344363638794).get_role(reaction_roles[947841356280258600][reaction.emoji.name]))
+        except KeyError as e:
+            pass
 
 @client.event
 async def on_raw_reaction_remove(reaction):
+    member = client.get_guild(947059344363638794).get_member(reaction.user_id)
     if reaction.guild_id == 947059344363638794 and reaction.message_id == 947154887370739803:
-        member = client.get_guild(947059344363638794).get_member(reaction.user_id)
         if reaction.emoji.name == '2️⃣':
             await member.remove_roles(client.get_guild(947059344363638794).get_role(947150257731551242))
         if reaction.emoji.name == '3️⃣':
@@ -67,6 +83,11 @@ async def on_raw_reaction_remove(reaction):
             await member.remove_roles(client.get_guild(947059344363638794).get_role(947150562972028928))
         if reaction.emoji.name == '6️⃣':
             await member.remove_roles(client.get_guild(947059344363638794).get_role(947150581674434600))
+    if reaction.guild_id == 947059344363638794 and reaction.message_id == 947841356280258600:
+        try:
+            await member.remove_roles(client.get_guild(947059344363638794).get_role(reaction_roles[947841356280258600][reaction.emoji.name]))
+        except KeyError as e:
+            pass 
 
 @client.event
 async def on_message(message):
