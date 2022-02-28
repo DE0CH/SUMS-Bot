@@ -57,7 +57,7 @@ async def on_raw_reaction_add(reaction):
             author = reaction.member
             codes[author.id] = secrets.token_hex(16)
             codes_guild[codes[author.id]] = 947059344363638794
-            await author.send("Thank you for verifying yourself. **Please reply here with your registered email address**.")
+            await author.send("Thank you for verifying yourself. **Please reply here with your registered email address (to where we have sent you SUMO emails)**.")
 
 @client.event
 async def on_raw_reaction_remove(reaction):
