@@ -30,3 +30,4 @@ Werkzeug==1.0.1
 wrapt==1.12.1
 yarl==1.5.1
 python-dotenv==0.19.2
+jurigged==0.4.1
