@@ -71,7 +71,7 @@ async def on_raw_reaction_add(reaction):
 
 @client.event
 async def on_raw_reaction_remove(reaction):
-    member = client.get_guild(947059344363638794).get_member(reaction.user_id)
+    member = client.get_guild(reaction.guild_id).get_member(reaction.user_id)
     if reaction.guild_id == 947059344363638794 and reaction.message_id == 947154887370739803:
         if reaction.emoji.name == '2️⃣':
             await member.remove_roles(client.get_guild(947059344363638794).get_role(947150257731551242))
