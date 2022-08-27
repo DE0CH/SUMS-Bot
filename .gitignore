@@ -345,3 +345,6 @@ bot.db
 dump.sql
 backup.db
 private_data
+config.json
+config.ts
+node_modules

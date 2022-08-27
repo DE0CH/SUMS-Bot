@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 
 services:
   email_bot:
     build: .
     restart: always
     volumes:
-      - ".:/usr/app" 
+      - ".:/usr/app"
