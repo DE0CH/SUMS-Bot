@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "ts-node bot.ts",
+    "start": "ts-node -T bot.ts",
     "dev": "ts-node-dev bot.ts"
   },
   "dependencies": {
