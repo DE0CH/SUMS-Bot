@@ -20,6 +20,7 @@ def verify_msg(guildname, domains):
 intents = discord.Intents.default()
 intents.members = True
 intents.reactions = True
+intents.message_content = True
 client = commands.Bot(command_prefix = '.', intents=intents)
 
 reaction_roles = {}
