@@ -58,6 +58,7 @@ client.login(token);
 client.on('interactionCreate', async interaction => {
   try {
   if (!interaction.isChatInputCommand()) return;
+  if (interaction.guildId != guildId) {await interaction.reply(`Command not supported.`); return}
 
   const { commandName, member } = interaction;
   if (commandName === 'ping') {
